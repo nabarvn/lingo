@@ -19,7 +19,7 @@ const UserProgress = ({
   hasActiveSubscription,
 }: UserProgressProps) => {
   return (
-    <div className="flex w-full items-center justify-between gap-x-2">
+    <div className="flex w-full items-center justify-between md:gap-x-0.5 lg:gap-x-2">
       <Link href="/courses">
         <Button variant="defaultOutline">
           <Image
