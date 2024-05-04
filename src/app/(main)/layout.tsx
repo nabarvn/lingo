@@ -5,9 +5,9 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   return (
     <Fragment>
       <MobileHeader />
-      <Sidebar className="hidden lg:flex" />
+      <Sidebar className="hidden md:flex" />
 
-      <main className="h-full pt-[50px] lg:pl-[256px] lg:pt-0">
+      <main className="h-full pt-[50px] md:pl-[256px] md:pt-0">
         <div className="mx-auto h-full max-w-[1056px] pt-6">{children}</div>
       </main>
     </Fragment>
