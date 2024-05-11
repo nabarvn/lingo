@@ -21,7 +21,7 @@ export const List = ({ courses, activeCourseId }: ListProps) => {
     if (pending) return;
 
     if (id === activeCourseId) {
-      return router.push("/learn");
+      startTransition(() => router.push("/learn"));
     }
 
     startTransition(() => {
