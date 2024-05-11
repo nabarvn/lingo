@@ -40,6 +40,9 @@ const buttonVariants = cva(
 
         sidebarOutline:
           "bg-transparent hover:bg-slate-100 text-slate-500 border-2 border-transparent transition-none",
+
+        locked:
+          "bg-neutral-200 hover:bg-neutral-200/90 text-primary-foreground border-neutral-400 border-b-4 active:border-b-0",
       },
       size: {
         sm: "h-9 px-3",
