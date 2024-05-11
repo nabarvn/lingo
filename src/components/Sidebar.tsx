@@ -16,7 +16,7 @@ const Sidebar = async ({ className }: SidebarProps) => {
   return (
     <div
       className={cn(
-        "left-0 top-0 flex flex-col h-full border-r-2 px-4 md:absolute md:w-[256px]",
+        "left-0 top-0 flex flex-col h-full border-r-2 px-4 md:fixed md:w-[256px]",
         className
       )}
     >
