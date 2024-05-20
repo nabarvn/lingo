@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { useCallback } from "react";
+import { useAudio, useKey } from "react-use";
 
 import { cn } from "@/lib/utils";
 import { challenges } from "@/server/db/schema";
@@ -26,8 +28,24 @@ const Card = ({
   disabled,
   type,
 }: CardProps) => {
+  const [audio, _, controls] = useAudio({ src: audioSrc ?? "" });
+
+  // useCallback() hook returns a memoized version of `handleClick` that only changes if one of the dependencies has changed
+  // memoization is essential here because `handleClick` is being used as a dependency in another hook
+  const handleClick = useCallback(() => {
+    if (disabled) return;
+
+    controls.play();
+    onClick();
+  }, [disabled, onClick, controls]);
+
+  // it is important for `useKey` to provide a stable reference to the callback function
+  // useCallback() hook ensures that the `handleClick` reference remains stable across renders unless its dependencies change
+  useKey(shortcut, handleClick, {}, [handleClick]);
+
   return (
     <div
+      onClick={handleClick}
       className={cn(
         "h-full border-2 rounded-xl border-b-4 hover:bg-black/5 cursor-pointer active:border-b-2 p-4 lg:p-6",
         {
@@ -41,6 +59,8 @@ const Card = ({
         }
       )}
     >
+      {audio}
+
       {imageSrc && (
         <div className="relative aspect-square max-h-[80px] lg:max-h-[150px] w-full mb-4">
           <Image fill src={imageSrc} alt={text} />
