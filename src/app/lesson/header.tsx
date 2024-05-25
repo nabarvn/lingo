@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { X } from "lucide-react";
+import { InfinityIcon, X } from "lucide-react";
 
 import { Progress } from "@/components/ui";
 import { useExitModal } from "@/store/use-exit-modal";
@@ -7,9 +7,10 @@ import { useExitModal } from "@/store/use-exit-modal";
 type HeaderProps = {
   hearts: number;
   percentage: number;
+  hasActiveSubscription: boolean;
 };
 
-const Header = ({ hearts, percentage }: HeaderProps) => {
+const Header = ({ hearts, percentage, hasActiveSubscription }: HeaderProps) => {
   const { open } = useExitModal();
 
   return (
@@ -29,6 +30,12 @@ const Header = ({ hearts, percentage }: HeaderProps) => {
           width={28}
           className="mr-2"
         />
+
+        {hasActiveSubscription ? (
+          <InfinityIcon className="h-6 w-6 stroke-[3] shrink-0" />
+        ) : (
+          hearts
+        )}
       </div>
     </header>
   );
