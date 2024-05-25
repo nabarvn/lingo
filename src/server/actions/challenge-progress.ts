@@ -5,7 +5,8 @@ import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 import db from "@/server/db/drizzle";
-import { getUserProgress } from "@/server/db/queries";
+import { DEFAULT_HEARTS_MAX, POINTS_PER_CHALLENGE } from "@/constants";
+import { getUserProgress, getUserSubscription } from "@/server/db/queries";
 
 import {
   challenges,
@@ -21,6 +22,7 @@ export const upsertChallengeProgress = async (challengeId: number) => {
   }
 
   const currentUserProgress = await getUserProgress();
+  const userSubscription = await getUserSubscription();
 
   if (!currentUserProgress) {
     throw new Error("User progress not found");
@@ -45,8 +47,11 @@ export const upsertChallengeProgress = async (challengeId: number) => {
 
   const isPractice = !!existingChallengeProgress;
 
-  // TODO: not if user has a subscription
-  if (currentUserProgress.hearts === 0 && !isPractice) {
+  if (
+    currentUserProgress.hearts === 0 &&
+    !isPractice &&
+    !userSubscription?.isActive
+  ) {
     return { error: "hearts" };
   }
 
@@ -62,11 +67,11 @@ export const upsertChallengeProgress = async (challengeId: number) => {
     await db
       .update(userProgress)
       .set({
-        // default number of hearts = 5
-        hearts: Math.min(currentUserProgress.hearts + 1, 5),
+        // default maximum number of hearts = DEFAULT_HEARTS_MAX
+        hearts: Math.min(currentUserProgress.hearts + 1, DEFAULT_HEARTS_MAX),
 
-        // default number of points = 0
-        points: currentUserProgress.points + 10,
+        // default number of points = DEFAULT_POINTS_START
+        points: currentUserProgress.points + POINTS_PER_CHALLENGE,
       })
       .where(eq(userProgress.userId, userId));
 
@@ -87,7 +92,7 @@ export const upsertChallengeProgress = async (challengeId: number) => {
   await db
     .update(userProgress)
     .set({
-      points: currentUserProgress.points + 10,
+      points: currentUserProgress.points + POINTS_PER_CHALLENGE,
     })
     .where(eq(userProgress.userId, userId));
 
