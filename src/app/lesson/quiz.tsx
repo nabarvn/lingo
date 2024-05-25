@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { toast } from "sonner";
-import { useWindowSize } from "react-use";
 import ReactConfetti from "react-confetti";
 import { useRouter } from "next/navigation";
+import { useMount, useWindowSize } from "react-use";
 import { useRef, useState, useTransition } from "react";
 
 import Header from "./header";
@@ -13,9 +13,23 @@ import Challenge from "./challenge";
 import ResultCard from "./result-card";
 import QuestionBubble from "./question-bubble";
 
+import {
+  challengeOptions,
+  challenges,
+  userSubscription,
+} from "@/server/db/schema";
+
+import { useHeartsModal } from "@/store/use-hearts-modal";
+import { usePracticeModal } from "@/store/use-practice-modal";
+
 import { reduceHearts } from "@/server/actions/user-progress";
-import { challengeOptions, challenges } from "@/server/db/schema";
 import { upsertChallengeProgress } from "@/server/actions/challenge-progress";
+
+import {
+  DEFAULT_HEARTS_MAX,
+  DEFAULT_POINTS_START,
+  POINTS_PER_CHALLENGE,
+} from "@/constants";
 
 type QuizProps = {
   initialLessonId: number;
@@ -25,6 +39,11 @@ type QuizProps = {
   })[];
   initialHearts: number;
   initialPercentage: number;
+  userSubscription:
+    | (typeof userSubscription.$inferSelect & {
+        isActive: boolean;
+      })
+    | null;
 };
 
 const Quiz = ({
@@ -32,10 +51,20 @@ const Quiz = ({
   initialLessonChallenges,
   initialHearts,
   initialPercentage,
+  userSubscription,
 }: QuizProps) => {
   const router = useRouter();
   const { width, height } = useWindowSize();
   const [pending, startTransition] = useTransition();
+
+  const { open: openHeartsModal } = useHeartsModal();
+  const { open: openPracticeModal } = usePracticeModal();
+
+  useMount(() => {
+    if (initialPercentage === 100) {
+      openPracticeModal();
+    }
+  });
 
   const correctAudioRef = useRef<HTMLAudioElement | null>(null);
   const incorrectAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -44,9 +73,9 @@ const Quiz = ({
   const [lessonId] = useState<number>(initialLessonId);
   const [hearts, setHearts] = useState<number>(initialHearts);
 
-  const [percentage, setPercentage] = useState<number>(() => {
-    return initialPercentage === 100 ? 0 : initialPercentage;
-  });
+  const [percentage, setPercentage] = useState<number>(() =>
+    initialPercentage === 100 ? DEFAULT_POINTS_START : initialPercentage
+  );
 
   const [challenges] = useState(initialLessonChallenges);
 
@@ -63,6 +92,8 @@ const Quiz = ({
 
   const currentChallenge = challenges[activeIndex];
   const options = currentChallenge?.challengeOptions ?? [];
+
+  const isPro = !!userSubscription?.isActive;
 
   const title =
     currentChallenge?.type === "ASSIST"
@@ -105,7 +136,7 @@ const Quiz = ({
         upsertChallengeProgress(currentChallenge.id)
           .then((response) => {
             if (response?.error === "hearts") {
-              // TODO: open hearts modal
+              openHeartsModal();
               return;
             }
 
@@ -118,7 +149,7 @@ const Quiz = ({
 
             // this is a practice challenge
             if (initialPercentage === 100) {
-              setHearts((prev) => Math.min(prev + 1, 5));
+              setHearts((prev) => Math.min(prev + 1, DEFAULT_HEARTS_MAX));
             }
           })
           .catch(() => toast.error("Something went wrong. Please try again."));
@@ -128,7 +159,7 @@ const Quiz = ({
         reduceHearts(currentChallenge.id)
           .then((response) => {
             if (response?.error === "hearts") {
-              // TODO: open hearts modal
+              openHeartsModal();
               return;
             }
 
@@ -182,7 +213,11 @@ const Quiz = ({
           </h1>
 
           <div className="flex items-center gap-x-4 w-full">
-            <ResultCard variant="points" value={challenges.length * 10} />
+            <ResultCard
+              variant="points"
+              value={challenges.length * POINTS_PER_CHALLENGE}
+            />
+
             <ResultCard variant="hearts" value={hearts} />
           </div>
         </div>
@@ -201,7 +236,11 @@ const Quiz = ({
       <audio ref={correctAudioRef} src="/correct.wav" />
       <audio ref={incorrectAudioRef} src="/incorrect.wav" />
 
-      <Header hearts={hearts} percentage={percentage} />
+      <Header
+        hearts={hearts}
+        percentage={percentage}
+        hasActiveSubscription={isPro}
+      />
 
       <div className="flex-1">
         <div className="flex items-center justify-center h-full">
