@@ -23,6 +23,7 @@ const main = async () => {
     await db.delete(schema.userProgress);
     await db.delete(schema.challengeOptions);
     await db.delete(schema.challengeProgress);
+    await db.delete(schema.userSubscription);
 
     await db.insert(schema.courses).values([
       {
@@ -210,7 +211,7 @@ const main = async () => {
     console.log("🟢 Seeding finished");
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to seed database");
+    throw new Error("🔴 Failed to seed database");
   }
 };
 
