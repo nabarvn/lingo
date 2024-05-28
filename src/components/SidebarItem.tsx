@@ -27,7 +27,7 @@ const SidebarItem = ({ href, label, iconSrc }: SidebarItemProps) => {
           src={iconSrc}
           height={32}
           width={32}
-          className="mr-5"
+          className="mr-5 md:mr-3 lg:mr-5"
         />
         {label}
       </Link>
