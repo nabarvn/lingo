@@ -1,4 +1,5 @@
 import "./globals.css";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -21,7 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased hydrated">
       <ClerkProvider>
-        <body className={font.className}>
+        <body
+          className={cn(
+            "scrollbar-thumb-gray scrollbar-thumb-rounded scrollbar-track-gray-lighter scrollbar-w-4 scrolling-touch",
+            font.className
+          )}
+        >
           {children}
           <Toaster />
           <ExitModal />
