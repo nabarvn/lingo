@@ -2,8 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui";
-import { SidebarItem } from "@/components";
+import { Promo, SidebarItem } from "@/components";
 import { currentUser } from "@clerk/nextjs/server";
+import { getUserSubscription } from "@/server/db/queries";
 import { ClerkLoading, ClerkLoaded, UserButton, SignedIn } from "@clerk/nextjs";
 
 type SidebarProps = {
@@ -12,11 +13,16 @@ type SidebarProps = {
 
 const Sidebar = async ({ className }: SidebarProps) => {
   const user = await currentUser();
+  const userSubscriptionData = getUserSubscription();
+
+  const [userSubscription] = await Promise.all([userSubscriptionData]);
+
+  const isPro = !!userSubscription?.isActive;
 
   return (
     <div
       className={cn(
-        "left-0 top-0 flex flex-col h-full border-r-2 px-4 md:fixed md:w-[256px]",
+        "left-0 top-0 flex flex-col h-full border-r-2 px-4 md:fixed md:w-[225px] lg:w-[256px]",
         className
       )}
     >
@@ -43,46 +49,54 @@ const Sidebar = async ({ className }: SidebarProps) => {
         <SidebarItem href="/shop" label="shop" iconSrc="/shop.svg" />
       </div>
 
-      <div className="flex items-center justify-center gap-x-2 pb-4">
-        <ClerkLoading>
-          <SignedIn>
-            <Button
-              disabled
-              size="rounded"
-              className="h-[40px] w-[40px] animate-pulse bg-gray-200 ring ring-border"
-            />
+      <div className="flex flex-col gap-y-4">
+        <Promo
+          className={cn("md:hidden", {
+            hidden: isPro,
+          })}
+        />
 
-            <div className="flex flex-col h-[52px] w-[158px] gap-y-1 p-2">
-              <div className="h-16 bg-gray-200 animate-pulse rounded-xl" />
-              <div className="h-12 bg-gray-200 animate-pulse rounded-xl" />
-            </div>
-          </SignedIn>
-        </ClerkLoading>
+        <div className="flex items-center justify-center gap-x-2 pb-4">
+          <ClerkLoading>
+            <SignedIn>
+              <Button
+                disabled
+                size="rounded"
+                className="h-[40px] w-[40px] animate-pulse bg-gray-200 ring ring-border"
+              />
 
-        <ClerkLoaded>
-          <SignedIn>
-            <UserButton
-              afterSignOutUrl="/"
-              appearance={{
-                elements: {
-                  userButtonPopoverCard: { pointerEvents: "initial" },
-                  userButtonAvatarBox: {
-                    height: "40px",
-                    width: "40px",
+              <div className="flex flex-col h-[52px] w-[158px] gap-y-1 p-2">
+                <div className="h-16 bg-gray-200 animate-pulse rounded-xl" />
+                <div className="h-12 bg-gray-200 animate-pulse rounded-xl" />
+              </div>
+            </SignedIn>
+          </ClerkLoading>
+
+          <ClerkLoaded>
+            <SignedIn>
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    userButtonPopoverCard: { pointerEvents: "initial" },
+                    userButtonAvatarBox: {
+                      height: "40px",
+                      width: "40px",
+                    },
                   },
-                },
-              }}
-            />
+                }}
+              />
 
-            <div className="flex flex-col w-full p-2">
-              <span className="text-sm font-bold">{user?.fullName}</span>
+              <div className="flex flex-col w-full p-2">
+                <span className="text-sm font-bold">{user?.fullName}</span>
 
-              <span className="text-xs font-semibold">
-                {user?.primaryEmailAddress?.emailAddress}
-              </span>
-            </div>
-          </SignedIn>
-        </ClerkLoaded>
+                <span className="text-xs font-semibold">
+                  {user?.primaryEmailAddress?.emailAddress}
+                </span>
+              </div>
+            </SignedIn>
+          </ClerkLoaded>
+        </div>
       </div>
     </div>
   );
