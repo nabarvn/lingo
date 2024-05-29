@@ -1,4 +1,6 @@
+export { default as Promo } from "./Promo";
 export { default as Sidebar } from "./Sidebar";
+export { default as Quests } from "./Quests";
 export { default as MobileHeader } from "./MobileHeader";
 export { default as MobileSidebar } from "./MobileSidebar";
 export { default as SidebarItem } from "./SidebarItem";
