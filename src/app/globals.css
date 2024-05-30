@@ -23,3 +23,24 @@
     height: calc(100svh - 9rem);
   }
 }
+
+@media screen and (min-width: 750px) {
+  .scrollbar-w-4::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .scrollbar-track-gray-lighter::-webkit-scrollbar-track {
+    --bg-opacity: 0.5;
+    background-color: #00000015;
+  }
+
+  .scrollbar-thumb-gray::-webkit-scrollbar-thumb {
+    --bg-opacity: 0.5;
+    background-color: #13131374;
+  }
+
+  .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+  }
+}
