@@ -1,5 +1,12 @@
 import { redirect } from "next/navigation";
-import { FeedWrapper, StickyWrapper, UserProgress } from "@/components";
+
+import {
+  FeedWrapper,
+  StickyWrapper,
+  UserProgress,
+  Promo,
+  Quests,
+} from "@/components";
 
 import {
   getCourseProgress,
@@ -44,13 +51,23 @@ const LearnPage = async () => {
   const isPro = !!userSubscription?.isActive;
 
   return (
-    <div className="flex gap-4 lg:gap-[48px] px-6">
+    <div className="flex flex-col md:flex-row md:gap-4 lg:gap-[48px] px-6">
+      <div className="md:hidden border-b-2 py-3">
+        <UserProgress
+          activeCourse={userProgress.activeCourse}
+          hearts={userProgress.hearts}
+          points={userProgress.points}
+          hasActiveSubscription={isPro}
+        />
+      </div>
+
       <FeedWrapper>
         <Header title={userProgress.activeCourse.title} />
 
-        {units.map((unit) => (
-          <div key={unit.id} className="mb-10 pt-6">
+        {units.map((unit, i) => (
+          <div key={i} className="mb-10 pt-6">
             <Unit
+              id={unit.id}
               title={unit.title}
               description={unit.description}
               lessons={unit.lessons}
@@ -61,13 +78,16 @@ const LearnPage = async () => {
         ))}
       </FeedWrapper>
 
-      <StickyWrapper>
+      <StickyWrapper className="mt-6">
         <UserProgress
           activeCourse={userProgress.activeCourse}
           hearts={userProgress.hearts}
           points={userProgress.points}
           hasActiveSubscription={isPro}
         />
+
+        {!isPro && <Promo />}
+        <Quests points={userProgress.points} />
       </StickyWrapper>
     </div>
   );
