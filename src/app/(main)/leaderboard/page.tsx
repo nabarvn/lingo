@@ -37,7 +37,7 @@ const LeaderboardPage = async () => {
 
   return (
     <div className="flex flex-col md:flex-row md:gap-4 lg:gap-[48px] px-6">
-      <div className="sticky top-[50px] bg-white md:hidden border-b-2 z-50 py-3">
+      <div className="sticky top-[60px] bg-white md:hidden border-b-2 z-50 py-3">
         <UserProgress
           activeCourse={userProgress.activeCourse}
           hearts={userProgress.hearts}
