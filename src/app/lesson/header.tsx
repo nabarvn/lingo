@@ -20,7 +20,7 @@ const Header = ({ hearts, percentage, hasActiveSubscription }: HeaderProps) => {
         className="text-slate-500 hover:opacity-75 transition cursor-pointer"
       />
 
-      <Progress value={percentage} />
+      <Progress value={percentage} className="w-7/12 md:w-9/12" />
 
       <div className="flex items-center text-rose-500 font-bold">
         <Image
