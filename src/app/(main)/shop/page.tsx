@@ -2,16 +2,8 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import Items from "./items";
-
-import {
-  FeedWrapper,
-  UserProgress,
-  StickyWrapper,
-  Promo,
-  Quests,
-} from "@/components";
-
 import { getUserProgress, getUserSubscription } from "@/server/db/queries";
+import { FeedWrapper, UserProgress, StickyWrapper, Quests } from "@/components";
 
 const ShopPage = async () => {
   const userProgressData = getUserProgress();
@@ -30,7 +22,7 @@ const ShopPage = async () => {
 
   return (
     <div className="flex flex-col md:flex-row md:gap-4 lg:gap-[48px] px-6">
-      <div className="sticky top-[50px] bg-white md:hidden border-b-2 z-50 py-3">
+      <div className="sticky top-[60px] bg-white md:hidden border-b-2 z-50 py-3">
         <UserProgress
           activeCourse={userProgress.activeCourse}
           hearts={userProgress.hearts}
@@ -67,7 +59,6 @@ const ShopPage = async () => {
           hasActiveSubscription={isPro}
         />
 
-        {!isPro && <Promo />}
         <Quests points={userProgress.points} />
       </StickyWrapper>
     </div>
