@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Lingo
 
-## Getting Started
+Lingo aims to provide a super interactive and user-friendly platform for learning languages, regardless of your proficiency. Whether you’re just starting out or aiming to perfect your skills, this web app is loaded with features to make your language learning journey both enjoyable and effective. Dive in and discover a whole new way to learn!
 
-First, run the development server:
+## Screenshot
+
+<img src="./screenshot.png">
+
+<p align="center">
+  <a href="https://lingo.nabarun.app"><strong>View Project »</strong></a>
+</p>
+
+## Running Locally
+
+This application requires Node.js v20.12.1+.
+
+### Cloning the repository to the local machine:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/nabarvn/lingo.git
+cd lingo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installing the dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Setting up the `.env` file:
 
-## Learn More
+```bash
+cp .env.example .env
+```
 
-To learn more about Next.js, take a look at the following resources:
+> [!IMPORTANT]
+> Ensure you populate the variables with your respective API keys and configuration values before proceeding.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Configuring Drizzle:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+pnpm db:push
+```
 
-## Deploy on Vercel
+### Seeding the application:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm db:seed
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Running the application:
+
+```bash
+pnpm dev
+```
+
+## Tech Stack
+
+- **Language**: [TypeScript](https://www.typescriptlang.org)
+- **Framework**: [Next.js](https://nextjs.org)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com)
+- **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
+- **State Management**: [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
+- **ORM Toolkit**: [Drizzle](https://orm.drizzle.team/docs/overview)
+- **Postgres Database**: [Neon](https://neon.tech/docs/introduction/about)
+- **Authentication**: [Clerk](https://clerk.com/docs/quickstarts/nextjs)
+- **Payments**: [Stripe](https://stripe.com/docs/payments)
+- **Deployment**: [Vercel](https://vercel.com)
+
+## Acknowledgements
+
+- **Speech Generator**: [ElevenLabs](https://elevenlabs.io)
+- **Character Assets**: [Kenney](https://kenney.nl/assets/toon-characters-1)
+
+## Credits
+
+Huge props to Antonio for coming up with such an incredible tutorial. Knowledge packed content, as always!
+
+<hr />
+
+<div align="center">Don't forget to leave a STAR 🌟</div>
