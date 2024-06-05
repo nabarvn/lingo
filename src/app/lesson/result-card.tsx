@@ -26,7 +26,7 @@ const ResultCard = ({ value, variant }: ResultCardProps) => {
           }
         )}
       >
-        {variant === "hearts" ? "Hearts Left" : "Total XP"}
+        {variant === "hearts" ? "Hearts Left" : "Earned XP"}
       </div>
 
       <div
