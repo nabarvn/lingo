@@ -1,10 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
-import { Promo, SidebarItem } from "@/components";
 import { currentUser } from "@clerk/nextjs/server";
-import { getUserSubscription } from "@/server/db/queries";
+import { Button, Separator } from "@/components/ui";
+import { RepoStar, SidebarItem } from "@/components";
 import { ClerkLoading, ClerkLoaded, UserButton, SignedIn } from "@clerk/nextjs";
 
 type SidebarProps = {
@@ -13,11 +12,6 @@ type SidebarProps = {
 
 const Sidebar = async ({ className }: SidebarProps) => {
   const user = await currentUser();
-  const userSubscriptionData = getUserSubscription();
-
-  const [userSubscription] = await Promise.all([userSubscriptionData]);
-
-  const isPro = !!userSubscription?.isActive;
 
   return (
     <div
@@ -30,7 +24,7 @@ const Sidebar = async ({ className }: SidebarProps) => {
         <div className="flex items-center gap-x-3 px-4 py-8">
           <Image src="/mascot.svg" height={40} width={40} alt="Mascot" />
 
-          <h1 className="text-2xl font-extrabold tracking-wide text-green-600">
+          <h1 className="text-3xl font-extrabold tracking-wide text-green-600">
             Lingo
           </h1>
         </div>
@@ -49,14 +43,18 @@ const Sidebar = async ({ className }: SidebarProps) => {
         <SidebarItem href="/shop" label="shop" iconSrc="/shop.svg" />
       </div>
 
-      <div className="flex flex-col gap-y-4">
-        <Promo
-          className={cn("md:hidden", {
-            hidden: isPro,
-          })}
-        />
+      <Separator className="h-0.5" />
 
-        <div className="flex items-center justify-center gap-x-2 pb-4">
+      <div className="flex flex-col gap-y-4 mt-4">
+        <div className="flex items-center justify-center gap-x-2">
+          <RepoStar />
+
+          <span className="text-sm font-bold uppercase w-full p-2">
+            Star on GitHub
+          </span>
+        </div>
+
+        <div className="flex items-center justify-center gap-x-2 mb-4">
           <ClerkLoading>
             <SignedIn>
               <Button
@@ -78,7 +76,10 @@ const Sidebar = async ({ className }: SidebarProps) => {
                 afterSignOutUrl="/"
                 appearance={{
                   elements: {
-                    userButtonPopoverCard: { pointerEvents: "initial" },
+                    userButtonPopoverCard: {
+                      pointerEvents: "initial",
+                      width: "300px",
+                    },
                     userButtonAvatarBox: {
                       height: "40px",
                       width: "40px",
