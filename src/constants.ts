@@ -25,3 +25,26 @@ export const quests = [
     value: 1000,
   },
 ];
+
+export const sidebarItems = [
+  {
+    href: "/learn",
+    label: "learn",
+    iconSrc: "/learn.svg",
+  },
+  {
+    href: "/leaderboard",
+    label: "leaderboard",
+    iconSrc: "/leaderboard.svg",
+  },
+  {
+    href: "/quests",
+    label: "quests",
+    iconSrc: "/quests.svg",
+  },
+  {
+    href: "/shop",
+    label: "shop",
+    iconSrc: "/shop.svg",
+  },
+];
