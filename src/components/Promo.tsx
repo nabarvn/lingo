@@ -1,10 +1,14 @@
-import Link from "next/link";
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
+import { UpgradeButton } from "@/components";
 
-const Promo = ({ className }: { className?: string }) => (
+type PromoProps = {
+  isMobile?: boolean;
+  className?: string;
+};
+
+const Promo = ({ isMobile, className }: PromoProps) => (
   <div className={cn("border-2 rounded-xl space-y-4 p-4", className)}>
     <div className="space-y-2">
       <div className="flex items-center justify-center gap-x-2">
@@ -17,9 +21,7 @@ const Promo = ({ className }: { className?: string }) => (
       </p>
     </div>
 
-    <Button asChild size="lg" variant="super" className="w-full">
-      <Link href="/shop">Upgrade Now</Link>
-    </Button>
+    <UpgradeButton isMobile={isMobile} />
   </div>
 );
 
