@@ -110,7 +110,7 @@ const Quiz = ({
   };
 
   const onContinue = () => {
-    if (!selectedOption) return;
+    if (pending || !selectedOption) return;
 
     if (status === "wrong") {
       setStatus("none");
@@ -119,9 +119,12 @@ const Quiz = ({
     }
 
     if (status === "correct") {
-      onNext();
-      setStatus("none");
-      setSelectedOption(undefined);
+      startTransition(() => {
+        onNext();
+        setStatus("none");
+        setSelectedOption(undefined);
+      });
+
       return;
     }
 
