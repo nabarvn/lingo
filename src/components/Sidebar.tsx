@@ -89,7 +89,9 @@ const Sidebar = async ({ className }: SidebarProps) => {
               />
 
               <div className="flex flex-col w-full p-2">
-                <span className="text-sm font-bold">{user?.fullName}</span>
+                <span className="text-sm font-bold">
+                  {user?.firstName || "Anon"}
+                </span>
 
                 <span className="text-xs font-semibold">
                   {user?.primaryEmailAddress?.emailAddress}
