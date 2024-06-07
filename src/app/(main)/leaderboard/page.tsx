@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { currentUser } from "@clerk/nextjs/server";
 
 import {
   getTopTenUsers,
@@ -19,6 +20,8 @@ import {
 } from "@/components";
 
 const LeaderboardPage = async () => {
+  const user = await currentUser();
+
   const leaderboardData = getTopTenUsers();
   const userProgressData = getUserProgress();
   const userSubscriptionData = getUserSubscription();
@@ -68,24 +71,29 @@ const LeaderboardPage = async () => {
           {leaderboard.map((userProgress, index) => (
             <div
               key={userProgress.userId}
-              className="flex items-center w-full rounded-xl gap-2 hover:bg-gray-200/50 p-2 px-4"
+              className="flex items-center justify-between w-full rounded-xl gap-4 hover:bg-gray-200/50 p-2 px-4"
             >
-              <p className="font-bold text-lime-700 mr-2">{index + 1}</p>
+              <p className="font-bold text-lime-700">{index + 1}</p>
 
-              <Avatar className="border bg-green-500 h-8 w-8 lg:h-10 lg:w-10">
-                <AvatarImage
-                  className="object-cover"
-                  src={userProgress.userImageSrc}
-                />
-              </Avatar>
+              <div className="flex items-center w-[87%] md:w-[84%] lg:w-[90%] gap-2">
+                <Avatar className="border bg-green-500 h-8 w-8 lg:h-10 lg:w-10">
+                  <AvatarImage
+                    className="object-cover"
+                    src={userProgress.userImageSrc}
+                  />
+                </Avatar>
 
-              <p className="flex-1 font-bold text-neutral-800">
-                {userProgress.userName}
-              </p>
+                <p className="flex-1 font-bold text-neutral-800">
+                  {user?.id === userProgress.userId &&
+                  user.firstName !== userProgress.userName
+                    ? user.firstName || "Anon"
+                    : userProgress.userName}
+                </p>
 
-              <p className="text-muted-foreground text-sm lg:text-base">
-                {userProgress.points} XP
-              </p>
+                <p className="text-muted-foreground text-sm lg:text-base">
+                  {userProgress.points} XP
+                </p>
+              </div>
             </div>
           ))}
         </div>
